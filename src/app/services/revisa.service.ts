@@ -48,29 +48,29 @@ export class RevistaService {
 
     return this.http.get(baseUrlConsultaRevista+"/consultaRevistaPorParametros", {params});
   }
+  generateDocumentReport(nom:string, fre:string, desde:string, hasta:string, est:number, p:number, t:number): Observable<any> {
+      const params = new HttpParams()
+      .set("nombre", nom)
+      .set("frecuencia", fre)
+      .set("fecDesde", desde)
+      .set("fecHasta", hasta)
+      .set("estado", est)
+      .set("idPais", p)
+      .set("idTipo", t);
 
-   generateDocumentReport(nom:string, fre:string, desde:string, hasta:string, est:number, p:number, t:number): Observable<any> {
-          const params = new HttpParams()
-          .set("nombre", nom)
-          .set("frecuencia", fre)
-          .set("fecDesde", desde)
-          .set("fecHasta", hasta)
-          .set("estado", est)
-          .set("idPais", p)
-          .set("idTipo", t);
+    let headers = new HttpHeaders();
+    headers.append('Accept', 'application/pdf');
+    let requestOptions: any = { headers: headers, responseType: 'blob' };
 
-          let headers = new HttpHeaders();
-          headers.append('Accept', 'application/pdf');
-          let requestOptions: any = { headers: headers, responseType: 'blob' };
-
-          return this.http.post(baseUrlConsultaRevista +"/reporteRevistaPdf",{params}, requestOptions).pipe(map((response)=>{
-            return {
-                filename: 'reporteDocente20232.pdf',
-                data: new Blob([response], {type: 'application/pdf'})
-            };
-        }));
-  }
-
+    return this.http.post(baseUrlConsultaRevista +"/reporteRevistaPDF?nombre="+nom+"&frecuencia="
+      +fre+"&fecDesde="+desde+"&fecHasta="+hasta+"&estado="+
+      est+"&idPais="+p+"&idTipo="+t,'', requestOptions).pipe(map((response)=>{
+      return {
+          filename: 'reporteDocente20232.pdf',
+          data: new Blob([response], {type: 'application/pdf'})
+      };
+  }));
+}
 
   generateDocumentExcel(nom:string, fre:string, desde:string, hasta:string, est:number, p:number, t:number): Observable<any> {
     const params = new HttpParams()
@@ -86,7 +86,9 @@ export class RevistaService {
     headers.append('Accept', 'application/vnd.ms-excel');
     let requestOptions: any = { headers: headers, responseType: 'blob' };
 
-    return this.http.post(baseUrlConsultaRevista +"/reporteRevistaExcel?nombre="+nom+"&frecuencia="+fre+"&fecDesde="+desde+"&fecHasta="+hasta+"&estado="+est+"&idPais="+p+"&idTipo="+t,'', requestOptions).pipe(map((response)=>{
+    return this.http.post(baseUrlConsultaRevista +"/reporteRevistaExcel?nombre="+nom+"&frecuencia="+
+      fre+"&fecDesde="+desde+"&fecHasta="+hasta+"&estado="+est+"&idPais="+p+"&idTipo="+t,'', 
+      requestOptions).pipe(map((response)=>{
       return {
           filename: 'reporteExcel20232.xlsx',
           data: new Blob([response], {type: 'application/vnd.ms-excel'})

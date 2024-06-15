@@ -37,7 +37,7 @@ export class ConsultaRevistaComponent {
       varNombre: string = "";
       varFrecuencia: string = "";
       varEstado: boolean = false;
-      varFechaCreacionDesde: Date = new Date();
+      varFechaCreacionDesde: Date = new Date(1990,0,1);
       varFechaCreacionHasta: Date = new Date();
       varIdPais: number = -1;
       varIdTipo: number = -1;
